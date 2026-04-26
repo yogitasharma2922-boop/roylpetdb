@@ -2,6 +2,9 @@ import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import fs from "fs";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
 
 // Load our express app logic
 const appLogic = require("./src/server/app.js");
@@ -22,6 +25,7 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
+    // In production, serve built static files from dist
     const distPath = path.join(process.cwd(), "dist");
     if (fs.existsSync(distPath)) {
       app.use(express.static(distPath));
